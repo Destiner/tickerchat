@@ -1,4 +1,4 @@
-import { Cast } from '@/lib/types'
+import type { Cast } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
@@ -11,8 +11,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { useBalance } from '@/hooks/use-balance'
-import { TOKEN_CONFIG } from '@anon/utils/src/config'
 import { PostProvider, usePost } from './context'
 import { useToast } from '@/hooks/use-toast'
 import { Heart, Loader2, MessageSquare, RefreshCcw } from 'lucide-react'
@@ -24,8 +22,7 @@ export default function PostFeed({
   tokenAddress,
   userAddress,
 }: { tokenAddress: string; userAddress?: string }) {
-  const [selected, setSelected] = useState<'new' | 'trending'>('trending')
-  const { data: balance } = useBalance(tokenAddress, userAddress)
+  const [selected, setSelected] = useState<'new' | 'trending'>('new')
   const { signMessageAsync } = useSignMessage()
 
   const { data: trendingPosts } = useQuery({
@@ -59,15 +56,8 @@ export default function PostFeed({
     }
   }
 
-  const canDelete =
-    !!userAddress &&
-    !!balance &&
-    balance >= BigInt(TOKEN_CONFIG[tokenAddress].deleteAmount)
-
-  const canPromote =
-    !!userAddress &&
-    !!balance &&
-    balance >= BigInt(TOKEN_CONFIG[tokenAddress].promoteAmount)
+  const canDelete = false
+  const canPromote = false
 
   return (
     <PostProvider
@@ -77,21 +67,6 @@ export default function PostFeed({
     >
       <div className="flex flex-col gap-4">
         <div className="flex flex-row gap-4">
-          {trendingPosts && (
-            <div
-              className={`text-xl font-bold cursor-pointer ${
-                selected !== 'trending' ? 'text-gray-500' : ''
-              }`}
-              onClick={() => setSelected('trending')}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  setSelected('trending')
-                }
-              }}
-            >
-              Trending
-            </div>
-          )}
           {newPosts && (
             <div
               className={`text-xl font-bold cursor-pointer ${
@@ -105,6 +80,21 @@ export default function PostFeed({
               }}
             >
               New
+            </div>
+          )}
+          {trendingPosts && (
+            <div
+              className={`text-xl font-bold cursor-pointer ${
+                selected !== 'trending' ? 'text-gray-500' : ''
+              }`}
+              onClick={() => setSelected('trending')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setSelected('trending')
+                }
+              }}
+            >
+              Trending
             </div>
           )}
         </div>

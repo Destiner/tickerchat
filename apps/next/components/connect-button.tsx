@@ -1,8 +1,5 @@
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit'
 import { Button } from './ui/button'
-import { useBalance } from '@/hooks/use-balance'
-import { formatEther } from 'viem'
-import { MOXIE_ADDRESS, TOKEN_CONFIG } from '@anon/utils/src/config'
 
 export const ConnectButton = () => {
   return (
@@ -60,7 +57,6 @@ export const ConnectButton = () => {
                   onClick={openAccountModal}
                   className="flex flex-row rounded-xl overflow-hidden bg-white items-center hover:scale-105 transition-all duration-300"
                 >
-                  <Balance address={account.address} />
                   <div className="text-md font-bold bg-gray-200 text-black rounded-xl py-1.5 px-3 m-0.5">
                     {account.displayName}
                   </div>
@@ -72,31 +68,4 @@ export const ConnectButton = () => {
       }}
     </RainbowConnectButton.Custom>
   )
-}
-
-function Balance({ address }: { address: string }) {
-  const { data } = useBalance(MOXIE_ADDRESS, address)
-
-  const amount = parseFloat(formatEther(data ?? BigInt(0)))
-  const tokenConfig = TOKEN_CONFIG[MOXIE_ADDRESS]
-  const ticker = tokenConfig.ticker
-
-  return (
-    <div className="text-md font-bold bg-white text-black pl-3 pr-2">
-      {`${formatNumber(amount)} ${ticker}`}
-    </div>
-  )
-}
-
-function formatNumber(num: number) {
-  if (num >= 1e9) {
-    return `${(num / 1e9).toFixed(2)}B`
-  }
-  if (num >= 1e6) {
-    return `${(num / 1e6).toFixed(2)}M`
-  }
-  if (num >= 1e3) {
-    return `${(num / 1e3).toFixed(2)}K`
-  }
-  return num.toFixed(2)
 }

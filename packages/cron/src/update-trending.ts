@@ -1,5 +1,5 @@
-import { MOXIE_ADDRESS, TOKEN_CONFIG } from '@anon/utils/src/config'
-import { Cast, GetCastsResponse } from '@anon/api/src/services/types'
+import { TOKEN_CONFIG, TOKENS } from '@anon/utils/src/config'
+import type { Cast, GetCastsResponse } from '@anon/api/src/services/types'
 import {
   bytesToHexString,
   createDefaultMetadataKeyInterceptor,
@@ -43,7 +43,13 @@ async function getCastData(hashes: string[]): Promise<Cast[]> {
 }
 
 async function main() {
-  const messages = await getCastMessages(TOKEN_CONFIG[MOXIE_ADDRESS].fid)
+  for (const token of TOKENS) {
+    await updateTrending(token);
+  }
+}
+
+async function updateTrending(tokenAddress: string) {
+  const messages = await getCastMessages(TOKEN_CONFIG[tokenAddress].fid)
   if (messages.length === 0) {
     return
   }
@@ -71,7 +77,7 @@ async function main() {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 25)
 
-  await redis.set(`trending:${MOXIE_ADDRESS}`, JSON.stringify(sortedCasts))
+  await redis.set(`trending:${tokenAddress}`, JSON.stringify(sortedCasts))
 }
 
 main()

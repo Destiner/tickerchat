@@ -3,7 +3,7 @@ import { Textarea } from '../ui/textarea'
 import { CreatePostProvider, useCreatePost } from './context'
 import { Image, Link, Loader2, Ban, X, Slash } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import {
   Dialog,
   DialogContent,

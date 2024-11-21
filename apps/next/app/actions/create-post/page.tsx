@@ -1,12 +1,12 @@
 'use client'
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Alert, AlertTitle } from '@/components/ui/alert'
 import { api } from '@/lib/api'
-import { MOXIE_ADDRESS } from '@anon/utils/src/config'
+import { useToken } from '@/hooks/use-token';
 import { useQuery } from '@tanstack/react-query'
 import { CircleHelp, ExternalLink, Loader2 } from 'lucide-react'
 import React from 'react'
-import { createPublicClient, erc20Abi, http } from 'viem'
+import { type Address, createPublicClient, erc20Abi, http } from 'viem'
 import { base } from 'viem/chains'
 
 const client = createPublicClient({
@@ -14,14 +14,15 @@ const client = createPublicClient({
   transport: http(),
 })
 
-async function getConnectedAddress(data: string) {
+async function getConnectedAddress(data: string, tokenAddress: Address) {
+
   const frameData = await api.validateFrame(data)
   if (!frameData) return null
 
   const balances = await Promise.all(
     frameData.action.interactor.verified_addresses.eth_addresses.map(async (address) => {
       const balance = await client.readContract({
-        address: MOXIE_ADDRESS,
+        address: tokenAddress,
         abi: erc20Abi,
         functionName: 'balanceOf',
         args: [address as `0x${string}`],
@@ -46,9 +47,11 @@ export default function CreatePostPage({
 }: {
   searchParams: { data: string }
 }) {
+  const { address: tokenAddress } = useToken();
+
   const { isLoading } = useQuery({
     queryKey: ['validate-frame', searchParams.data],
-    queryFn: () => getConnectedAddress(searchParams.data),
+    queryFn: () => getConnectedAddress(searchParams.data, tokenAddress),
   })
 
   if (isLoading) {
@@ -67,16 +70,11 @@ export default function CreatePostPage({
       <Alert>
         <CircleHelp className="h-4 w-4" />
         <AlertTitle className="font-bold">Post anonymously to Farcaster</AlertTitle>
-        <AlertDescription>
-          Must have <b>10,000 $MOXIE</b> in your wallet to post. Posts are made anonymous
-          using zk proofs. Due to the complex calculations required, it could take up to a
-          few minutes to post. We&apos;ll work on speeding this up in the future.
-        </AlertDescription>
       </Alert>
-      <a href="https://anoncast.org" target="_blank" rel="noreferrer">
+      <a href="https://tickerchat.org" target="_blank" rel="noreferrer">
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex flex-row items-center justify-between gap-2">
           <div className="flex flex-row items-center gap-2">
-            <p>Mini-app is currently disabled. Go to anoncast.org to post.</p>
+            <p>Mini-app is currently disabled. Go to tickerchat.org to post.</p>
             <ExternalLink size={16} />
           </div>
         </div>
@@ -91,7 +89,7 @@ export default function CreatePostPage({
                 type: 'createCast',
                 data: {
                   cast: {
-                    text: 'Posted to @anoncast, you can close this screen.',
+                    text: 'Posted to @tickerchat, you can close this screen.',
                     embeds: [],
                   },
                 },

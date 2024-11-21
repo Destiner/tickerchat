@@ -20,11 +20,6 @@ export const merkleTreeRoutes = createElysia({ prefix: '/merkle-tree' }).post(
     const config = TOKEN_CONFIG[body.tokenAddress]
 
     let minAmount = config.postAmount
-    if (body.proofType === ProofType.DELETE_POST) {
-      minAmount = config.deleteAmount
-    } else if (body.proofType === ProofType.PROMOTE_POST) {
-      minAmount = config.promoteAmount
-    }
 
     const tree = await buildHoldersTree({
       tokenAddress: body.tokenAddress,

@@ -1,26 +1,49 @@
+import { type Address, parseUnits } from "viem"
+
+export const DEGEN_ADDRESS = '0x4ed4e862860bed51a9570b96d89af5e1b0efefed'
+export const HIGHER_ADDRESS = '0x0578d8a44db98b23bf096a382e016e29a5ce0ffe'
 export const MOXIE_ADDRESS = '0x8c9037d1ef5c6d1f6816278c7aaf5491d24cd527'
 export const COMMENT_ADDRESS = '0x0000000000000000000000000000000000000000'
+
+const FARCASTER_USERNAME = 'tickerchat';
+const FID = 882553;
+
+export const TOKENS: Address[] = [
+  DEGEN_ADDRESS,
+  HIGHER_ADDRESS,
+  MOXIE_ADDRESS,
+]
 
 export const TOKEN_CONFIG: Record<
   string,
   {
     ticker: string
     postAmount: string
-    promoteAmount: string
-    deleteAmount: string
     farcasterChannel: string
     farcasterUsername: string
     fid: number
   }
 > = {
+  [DEGEN_ADDRESS]: {
+    ticker: 'DEGEN',
+    postAmount: parseUnits('75000', 18).toString(),
+    farcasterChannel: 'degen',
+    farcasterUsername: FARCASTER_USERNAME,
+    fid: FID,
+  },
+  [HIGHER_ADDRESS]: {
+    ticker: 'HIGHER',
+    postAmount: parseUnits('2500', 18).toString(),
+    farcasterChannel: 'higher',
+    farcasterUsername: FARCASTER_USERNAME,
+    fid: FID,
+  },
   [MOXIE_ADDRESS]: {
     ticker: 'MOXIE',
-    postAmount: '10000000000000000000000',
-    promoteAmount: '1000000000000000000000000',
-    deleteAmount: '1000000000000000000000000',
-    farcasterChannel: 'moxie',
-    farcasterUsername: 'tickerchat',
-    fid: 882553,
+    postAmount: parseUnits('8000', 18).toString(),
+    farcasterChannel: 'airstack',
+    farcasterUsername: FARCASTER_USERNAME,
+    fid: FID,
   },
 }
 
