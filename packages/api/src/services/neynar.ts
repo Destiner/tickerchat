@@ -1,5 +1,4 @@
 import crypto from 'crypto'
-import { getPostMapping, getSignerForAddress } from '@anon/db'
 import {
   CreatePostParams,
   GetBulkCastsResponse,
@@ -10,7 +9,7 @@ import {
   SubmitHashParams,
 } from './types'
 import Redis from 'ioredis'
-import { twitterClient } from './twitter'
+// import { twitterClient } from './twitter'
 
 const redis = new Redis(process.env.REDIS_URL as string)
 
@@ -107,7 +106,7 @@ class NeynarService {
   }
 
   async post(params: CreatePostParams) {
-    const signerUuid = await getSignerForAddress(params.tokenAddress)
+    const signerUuid = process.env.NEYNAR_SIGNER_UUID
 
     const embeds: Array<{
       url?: string
@@ -133,7 +132,7 @@ class NeynarService {
     }
 
     const body = {
-      signer_uuid: signerUuid.signerUuid,
+      signer_uuid: signerUuid,
       parent: params.parent,
       parent_author_fid: parentAuthorFid,
       text: params.text,
@@ -167,7 +166,7 @@ class NeynarService {
   }
 
   async delete(params: SubmitHashParams) {
-    const signerUuid = await getSignerForAddress(params.tokenAddress)
+    const signerUuid = process.env.NEYNAR_SIGNER_UUID
     const cast = await this.getCast(params.hash)
     if (!cast.cast) {
       return {
@@ -184,15 +183,15 @@ class NeynarService {
     await this.makeRequest('/farcaster/cast', {
       method: 'DELETE',
       body: JSON.stringify({
-        signer_uuid: signerUuid.signerUuid,
+        signer_uuid: signerUuid,
         target_hash: params.hash,
       }),
     })
 
-    const postMapping = await getPostMapping(params.hash)
-    if (postMapping) {
-      await twitterClient.v2.deleteTweet(postMapping.tweetId)
-    }
+    // const postMapping = await getPostMapping(params.hash)
+    // if (postMapping) {
+    //   await twitterClient.v2.deleteTweet(postMapping.tweetId)
+    // }
 
     return {
       success: true,

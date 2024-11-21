@@ -47,17 +47,7 @@ export default function Home() {
           <b>Requirements:</b>
           <ul>
             <li>
-              <p>
-                - <b className="line-through">30,000 ANON</b>
-                <b className="text-green-500 font-bold">{' 15,000 ANON'}</b>: Post on
-                Farcaster
-              </p>
-            </li>
-            <li>
-              - <b>1,000,000 ANON</b>: Promote posts to X/Twitter
-            </li>
-            <li>
-              - <b>1,000,000 ANON</b>: Delete posts
+              Own 10 ANON to post on Farcaster
             </li>
           </ul>
         </AlertDescription>

@@ -4,8 +4,7 @@ import { ProofType, verifyProof } from '@anon/utils/src/proofs'
 import { zeroAddress } from 'viem'
 import { CreatePostParams, SubmitHashParams } from '../services/types'
 import { neynar } from '../services/neynar'
-import { promoteToTwitter } from '../services/twitter'
-import { createPostMapping, getPostMapping } from '@anon/db'
+// import { promoteToTwitter } from '../services/twitter'
 import { getQueue, QueueName } from '@anon/queue/src/utils'
 
 export const postRoutes = createElysia({ prefix: '/posts' })
@@ -82,61 +81,61 @@ export const postRoutes = createElysia({ prefix: '/posts' })
       }),
     }
   )
-  .post(
-    '/promote',
-    async ({ body }) => {
-      const isValid = await validateProof(
-        ProofType.PROMOTE_POST,
-        body.proof,
-        body.publicInputs
-      )
-      if (!isValid) {
-        throw new Error('Invalid proof')
-      }
+  // .post(
+  //   '/promote',
+  //   async ({ body }) => {
+  //     const isValid = await validateProof(
+  //       ProofType.PROMOTE_POST,
+  //       body.proof,
+  //       body.publicInputs
+  //     )
+  //     if (!isValid) {
+  //       throw new Error('Invalid proof')
+  //     }
 
-      const params = extractSubmitHashData(body.publicInputs)
-      if (params.timestamp < Date.now() / 1000 - 600) {
-        return {
-          success: false,
-        }
-      }
+  //     const params = extractSubmitHashData(body.publicInputs)
+  //     if (params.timestamp < Date.now() / 1000 - 600) {
+  //       return {
+  //         success: false,
+  //       }
+  //     }
 
-      const mapping = await getPostMapping(params.hash)
-      if (mapping?.tweetId) {
-        return {
-          success: true,
-        }
-      }
+  //     const mapping = await getPostMapping(params.hash)
+  //     if (mapping?.tweetId) {
+  //       return {
+  //         success: true,
+  //       }
+  //     }
 
-      const cast = await neynar.getCast(params.hash)
-      if (!cast.cast) {
-        return {
-          success: false,
-        }
-      }
+  //     const cast = await neynar.getCast(params.hash)
+  //     if (!cast.cast) {
+  //       return {
+  //         success: false,
+  //       }
+  //     }
 
-      const tweetId = await promoteToTwitter(cast.cast)
+  //     const tweetId = await promoteToTwitter(cast.cast)
 
-      if (!tweetId) {
-        return {
-          success: false,
-        }
-      }
+  //     if (!tweetId) {
+  //       return {
+  //         success: false,
+  //       }
+  //     }
 
-      await createPostMapping(params.hash, tweetId)
+  //     await createPostMapping(params.hash, tweetId)
 
-      return {
-        success: true,
-        tweetId,
-      }
-    },
-    {
-      body: t.Object({
-        proof: t.Array(t.Number()),
-        publicInputs: t.Array(t.Array(t.Number())),
-      }),
-    }
-  )
+  //     return {
+  //       success: true,
+  //       tweetId,
+  //     }
+  //   },
+  //   {
+  //     body: t.Object({
+  //       proof: t.Array(t.Number()),
+  //       publicInputs: t.Array(t.Array(t.Number())),
+  //     }),
+  //   }
+  // )
 
 async function validateProof(
   proofType: ProofType,

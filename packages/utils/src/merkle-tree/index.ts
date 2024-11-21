@@ -9,7 +9,7 @@ interface BuildTreeArgs {
 
 export async function buildHoldersTree(args: BuildTreeArgs) {
   const mimc = await buildMimc()
-  const merkleTree = new MerkleTreeMiMC(12, mimc)
+  const merkleTree = new MerkleTreeMiMC(13, mimc)
 
   const owners = await fetchHolders(args)
   for (const owner of owners) {
@@ -63,7 +63,15 @@ async function fetchHolders(args: BuildTreeArgs) {
         first_transferred_date: string
         last_transferred_date: string
       }>
+    } | {
+      detail: string;
     } = await response.json()
+
+    if ('detail' in res) {
+      console.log('fetchHolder: sleeping');
+      await sleep(60 * 1000);
+      continue;
+    }
 
     let shouldBreak = false
     for (const owner of res.owners) {
@@ -85,4 +93,8 @@ async function fetchHolders(args: BuildTreeArgs) {
   }
 
   return owners
+}
+
+async function sleep(ms: number): Promise<void> {
+  new Promise(resolve => setTimeout(resolve, ms));
 }

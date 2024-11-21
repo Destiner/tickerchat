@@ -6,7 +6,7 @@ export const runtime = 'edge'
 const NEXT_SERVER_URL =
   process.env.NODE_ENV === 'production'
     ? 'https://anoncast.org'
-    : 'https://nook.ngrok.dev'
+    : 'https://localhost:3000'
 
 export async function POST(request: Request) {
   const body: ActionPayload = await request.json()

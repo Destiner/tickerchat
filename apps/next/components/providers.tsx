@@ -10,7 +10,7 @@ import { ThemeProvider } from 'next-themes'
 
 const config = getDefaultConfig({
   appName: 'My RainbowKit App',
-  projectId: '302e299e8d6c292b6aeb9f313321e134',
+  projectId: '9df3dd72ed4409e550edabebd77bb221',
   chains: [base],
   ssr: true,
 })

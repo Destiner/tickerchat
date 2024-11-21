@@ -14,11 +14,11 @@ export const TOKEN_CONFIG: Record<
 > = {
   [ANON_ADDRESS]: {
     ticker: 'ANON',
-    postAmount: '15000000000000000000000',
+    postAmount: '10000000000000000000',
     promoteAmount: '1000000000000000000000000',
     deleteAmount: '1000000000000000000000000',
-    farcasterUsername: 'anoncast',
-    fid: 880094,
+    farcasterUsername: 'tickerchat',
+    fid: 882553,
   },
   [COMMENT_ADDRESS]: {
     ticker: 'COMMENT',
@@ -26,7 +26,7 @@ export const TOKEN_CONFIG: Record<
     promoteAmount: '1',
     deleteAmount: '1',
     farcasterUsername: 'comment',
-    fid: 880094,
+    fid: 882553,
   },
 }
 
