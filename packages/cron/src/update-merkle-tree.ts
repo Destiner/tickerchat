@@ -1,14 +1,14 @@
 import { buildHoldersTree } from '@anon/utils/src/merkle-tree'
-import { TOKEN_CONFIG, ANON_ADDRESS } from '@anon/utils/src/config'
+import { TOKEN_CONFIG, MOXIE_ADDRESS } from '@anon/utils/src/config'
 import Redis from 'ioredis'
 import { ProofType } from '@anon/utils/src/proofs'
 const redis = new Redis(process.env.REDIS_URL as string)
 
 const main = async () => {
-  const config = TOKEN_CONFIG[ANON_ADDRESS]
-  await buildAndCacheTree(ANON_ADDRESS, ProofType.CREATE_POST, config.postAmount)
-  await buildAndCacheTree(ANON_ADDRESS, ProofType.DELETE_POST, config.deleteAmount)
-  await buildAndCacheTree(ANON_ADDRESS, ProofType.PROMOTE_POST, config.promoteAmount)
+  const config = TOKEN_CONFIG[MOXIE_ADDRESS]
+  await buildAndCacheTree(MOXIE_ADDRESS, ProofType.CREATE_POST, config.postAmount)
+  await buildAndCacheTree(MOXIE_ADDRESS, ProofType.DELETE_POST, config.deleteAmount)
+  await buildAndCacheTree(MOXIE_ADDRESS, ProofType.PROMOTE_POST, config.promoteAmount)
 }
 
 main().then(() => {

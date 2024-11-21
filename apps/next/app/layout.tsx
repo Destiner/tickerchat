@@ -55,10 +55,10 @@ const sfProRounded = localFont({
 })
 
 export const metadata: Metadata = {
-  title: '$ANON',
+  title: 'tickerchat',
   description: 'Post anonymously to Farcaster.',
   openGraph: {
-    title: '$ANON',
+    title: 'tickerchat',
     description: 'Post anonymously to Farcaster.',
     images: ['/anon.webp'],
   },

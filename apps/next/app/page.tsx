@@ -4,7 +4,7 @@ import { ConnectButton } from '@/components/connect-button'
 import { CreatePost } from '@/components/create-post'
 import PostFeed from '@/components/post-feed'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { ANON_ADDRESS } from '@anon/utils/src/config'
+import { MOXIE_ADDRESS } from '@anon/utils/src/config'
 import { CircleHelp } from 'lucide-react'
 import { useAccount, useSignMessage } from 'wagmi'
 
@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <div className="flex h-screen w-screen flex-col p-4 max-w-screen-sm mx-auto gap-8">
       <div className="flex items-center justify-between">
-        <div className="text-3xl font-bold">$ANON</div>
+        <div className="text-3xl font-bold">tickerchat</div>
         <ConnectButton />
       </div>
       <Alert>
@@ -47,61 +47,29 @@ export default function Home() {
           <b>Requirements:</b>
           <ul>
             <li>
-              Own 10 ANON to post on Farcaster
+              Own 10K MOXIE to post on Farcaster
             </li>
           </ul>
         </AlertDescription>
         <div className="mt-4 flex flex-row gap-2 justify-end">
           <a
-            href="https://warpcast.com/anoncast"
+            href="https://warpcast.com/tickerchat"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-gray-500 font-semibold"
           >
             Farcaster
           </a>
-          <a
-            href="https://x.com/anoncast_"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 font-semibold"
-          >
-            X/Twitter
-          </a>
-          <a
-            href="https://dexscreener.com/base/0xc4ecaf115cbce3985748c58dccfc4722fef8247c"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 font-semibold"
-          >
-            DEX Screener
-          </a>
-          <a
-            href="https://basescan.org/token/0x0db510e79909666d6dec7f5e49370838c16d950f"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 font-semibold"
-          >
-            Basescan
-          </a>
-          <a
-            href="https://app.uniswap.org/swap?outputCurrency=0x0Db510e79909666d6dEc7f5e49370838c16D950f&chain=base"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 font-semibold"
-          >
-            Uniswap
-          </a>
         </div>
       </Alert>
       {address && (
         <CreatePost
-          tokenAddress={ANON_ADDRESS}
+          tokenAddress={MOXIE_ADDRESS}
           userAddress={address}
           getSignature={getSignature}
         />
       )}
-      <PostFeed tokenAddress={ANON_ADDRESS} userAddress={address} />
+      <PostFeed tokenAddress={MOXIE_ADDRESS} userAddress={address} />
     </div>
   )
 }

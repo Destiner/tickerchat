@@ -2,7 +2,7 @@
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { api } from '@/lib/api'
-import { ANON_ADDRESS } from '@anon/utils/src/config'
+import { MOXIE_ADDRESS } from '@anon/utils/src/config'
 import { useQuery } from '@tanstack/react-query'
 import { CircleHelp, ExternalLink, Loader2 } from 'lucide-react'
 import React from 'react'
@@ -21,7 +21,7 @@ async function getConnectedAddress(data: string) {
   const balances = await Promise.all(
     frameData.action.interactor.verified_addresses.eth_addresses.map(async (address) => {
       const balance = await client.readContract({
-        address: ANON_ADDRESS,
+        address: MOXIE_ADDRESS,
         abi: erc20Abi,
         functionName: 'balanceOf',
         args: [address as `0x${string}`],
@@ -62,13 +62,13 @@ export default function CreatePostPage({
   return (
     <div className="flex h-screen w-screen flex-col p-4 max-w-screen-sm mx-auto gap-8">
       <div className="flex items-center justify-between">
-        <div className="text-3xl font-bold">$ANON</div>
+        <div className="text-3xl font-bold">tickerchat</div>
       </div>
       <Alert>
         <CircleHelp className="h-4 w-4" />
         <AlertTitle className="font-bold">Post anonymously to Farcaster</AlertTitle>
         <AlertDescription>
-          Must have <b>20,000 $ANON</b> in your wallet to post. Posts are made anonymous
+          Must have <b>10,000 $MOXIE</b> in your wallet to post. Posts are made anonymous
           using zk proofs. Due to the complex calculations required, it could take up to a
           few minutes to post. We&apos;ll work on speeding this up in the future.
         </AlertDescription>
@@ -83,7 +83,7 @@ export default function CreatePostPage({
       </a>
       {/* {data && (
         <CreatePost
-          tokenAddress={ANON_ADDRESS}
+          tokenAddress={MOXIE_ADDRESS}
           userAddress={data}
           onSuccess={() => {
             window.parent.postMessage(

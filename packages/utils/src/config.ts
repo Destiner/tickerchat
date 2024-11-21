@@ -1,4 +1,4 @@
-export const ANON_ADDRESS = '0x0db510e79909666d6dec7f5e49370838c16d950f'
+export const MOXIE_ADDRESS = '0x8c9037d1ef5c6d1f6816278c7aaf5491d24cd527'
 export const COMMENT_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const TOKEN_CONFIG: Record<
@@ -12,9 +12,9 @@ export const TOKEN_CONFIG: Record<
     fid: number
   }
 > = {
-  [ANON_ADDRESS]: {
-    ticker: 'ANON',
-    postAmount: '10000000000000000000',
+  [MOXIE_ADDRESS]: {
+    ticker: 'MOXIE',
+    postAmount: '10000000000000000000000',
     promoteAmount: '1000000000000000000000000',
     deleteAmount: '1000000000000000000000000',
     farcasterUsername: 'tickerchat',

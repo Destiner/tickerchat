@@ -2,7 +2,7 @@ import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit'
 import { Button } from './ui/button'
 import { useBalance } from '@/hooks/use-balance'
 import { formatEther } from 'viem'
-import { ANON_ADDRESS } from '@anon/utils/src/config'
+import { MOXIE_ADDRESS, TOKEN_CONFIG } from '@anon/utils/src/config'
 
 export const ConnectButton = () => {
   return (
@@ -75,13 +75,15 @@ export const ConnectButton = () => {
 }
 
 function Balance({ address }: { address: string }) {
-  const { data } = useBalance(ANON_ADDRESS, address)
+  const { data } = useBalance(MOXIE_ADDRESS, address)
 
   const amount = parseFloat(formatEther(data ?? BigInt(0)))
+  const tokenConfig = TOKEN_CONFIG[MOXIE_ADDRESS]
+  const ticker = tokenConfig.ticker
 
   return (
     <div className="text-md font-bold bg-white text-black pl-3 pr-2">
-      {`${formatNumber(amount)} ANON`}
+      {`${formatNumber(amount)} ${ticker}`}
     </div>
   )
 }
