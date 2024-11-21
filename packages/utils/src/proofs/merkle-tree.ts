@@ -1,6 +1,5 @@
 // sourced from 33bits
-// @ts-ignore -- no types
-import { Mimc7 as MiMC } from 'circomlibjs'
+import type { Mimc7 as MiMC } from 'circomlibjs'
 
 export function MiMC7(mimc7: MiMC, left: string, right: string): string {
   const left_hex = `0x${'0'.repeat(64 - left.length)}${left}`

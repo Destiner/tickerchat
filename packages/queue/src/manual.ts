@@ -6,7 +6,7 @@ const run = async () => {
   const job = await queue.getJob(process.argv[2])
   if (job) {
     const result = await handler(job.data)
-    console.log(JSON.stringify(result, null, 2))
+    console.info(JSON.stringify(result, null, 2))
   }
 }
 

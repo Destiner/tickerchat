@@ -1,5 +1,7 @@
-import { ProofData } from '@noir-lang/types'
+import type { ProofData } from '@noir-lang/types'
+// @ts-ignore
 import createPostCircuit from '@anon/circuits/create-post/target/main.json'
+// @ts-ignore
 import submitHashCircuit from '@anon/circuits/submit-hash/target/main.json'
 import { recoverPublicKey } from 'viem'
 import { BarretenbergBackend } from '@noir-lang/backend_barretenberg'

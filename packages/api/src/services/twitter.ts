@@ -1,11 +1,11 @@
 import {
+  type SendTweetV2Params,
   ApiResponseError,
-  SendTweetV2Params,
   TwitterApi,
   TwitterApiV2Settings,
 } from 'twitter-api-v2'
-import { Cast } from './types'
-import https from 'https'
+import type { Cast } from './types'
+import https from 'node:https'
 import { Redis } from 'ioredis'
 
 TwitterApiV2Settings.debug = true

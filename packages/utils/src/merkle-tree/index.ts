@@ -68,7 +68,6 @@ async function fetchHolders(args: BuildTreeArgs) {
     } = await response.json()
 
     if ('detail' in res) {
-      console.log('fetchHolder: sleeping');
       await sleep(60 * 1000);
       continue;
     }

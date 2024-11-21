@@ -33,7 +33,7 @@ const run = async () => {
   const server = setupServer()
   const port = Number(process.env.PORT || '3002')
   await server.listen({ port, host: '0.0.0.0' })
-  console.log(`Listening on :${port}`)
+  console.info(`Listening on :${port}`)
 }
 
 run().catch((e) => {

@@ -9,25 +9,25 @@ const run = async () => {
   // Start worker
   const usePromotePost = !!process.argv[2]
   const queueName = usePromotePost ? QueueName.PromotePost : QueueName.Default
-  console.log(`Starting worker for ${queueName}`)
+  console.info(`Starting worker for ${queueName}`)
   const worker = getWorker(queueName, async (job) => {
     if (job.data.type === ProofType.PROMOTE_POST) {
       const rateLimit = await redis.get('twitter:rate-limit')
       if (rateLimit) {
-        job.moveToDelayed(parseInt(rateLimit) * 1000)
-        console.log(`[${job.id}] rate limit hit, delaying ${job.data.type}`)
+        job.moveToDelayed(Number.parseInt(rateLimit) * 1000)
+        console.info(`[${job.id}] rate limit hit, delaying ${job.data.type}`)
         return
       }
     }
 
-    console.log(`[${job.id}] started ${job.data.type}`)
+    console.info(`[${job.id}] started ${job.data.type}`)
     await handler(job.data)
-    console.log(`[${job.id}] completed ${job.data.type}`)
+    console.info(`[${job.id}] completed ${job.data.type}`)
   })
 
   worker.on('failed', (job, err) => {
     if (job) {
-      console.log(`[${job.id}] failed with ${err.message}`)
+      console.info(`[${job.id}] failed with ${err.message}`)
     }
   })
 }

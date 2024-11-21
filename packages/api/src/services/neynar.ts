@@ -1,5 +1,5 @@
-import crypto from 'crypto'
-import {
+import crypto from 'node:crypto'
+import type {
   CreatePostParams,
   GetBulkCastsResponse,
   GetCastResponse,

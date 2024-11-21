@@ -1,5 +1,5 @@
 import { ProofType } from '@anon/utils/src/proofs'
-import { QueueArgs } from './utils'
+import type { QueueArgs } from './utils'
 
 export async function handler(data: QueueArgs) {
   switch (data.type) {
