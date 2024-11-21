@@ -10,6 +10,7 @@ const HOUR = 60 * MINUTE;
 const main = async () => {
   for (const address of TOKENS) {
     const config = TOKEN_CONFIG[address]
+    console.info(`Building tree for ${config.ticker}`)
     await buildAndCacheTree(address, ProofType.CREATE_POST, config.postAmount)
   }
 }
