@@ -52,13 +52,16 @@ export default function Home() {
           Anonymous chat for every community
         </AlertTitle>
         <AlertDescription>
-          Posts are made anonymous using zk proofs. It could take up to a few minutes to post.
+          Posts are made anonymous using ZK proofs. It could take up to a few minutes to post.
           <br />
           <br />
           The channel is selected based on the token ticker.
           <br />
           <br />
           Own { formatUnits(BigInt(tokenConfig.postAmount), 18) } { tokenConfig.ticker } to post to /{ tokenConfig.farcasterChannel }
+          <br />
+          <br />
+          Note: the holder data is heavily cached. If you{'\''}ve recently got the tokens, please wait for a few hours.
         </AlertDescription>
         <div className="mt-4 flex flex-row gap-2 justify-end">
           <a
