@@ -1,9 +1,9 @@
 import { Button } from '../ui/button'
 import { Textarea } from '../ui/textarea'
 import { CreatePostProvider, useCreatePost } from './context'
-import { Image, Link, Loader2, Quote, Reply, X, Slash } from 'lucide-react'
+import { Image, Link, Loader2, Ban, X, Slash } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
-import { ReactNode, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -45,6 +45,8 @@ export function CreatePost({
     | undefined
   >
 }) {
+  const farcasterChannel = TOKEN_CONFIG[tokenAddress].farcasterChannel
+
   const { data } = useBalance(tokenAddress, userAddress)
 
   if (data === undefined) return null
@@ -75,12 +77,14 @@ export function CreatePost({
       onSuccess={onSuccess}
       getSignature={getSignature}
     >
-      <CreatePostForm />
+      <CreatePostForm farcasterChannel={farcasterChannel} />
     </CreatePostProvider>
   )
 }
 
-function CreatePostForm() {
+function CreatePostForm({ farcasterChannel }: {
+  farcasterChannel: string
+}) {
   const { text, setText, createPost, state } = useCreatePost()
   const { toast } = useToast()
   const [confetti, setConfetti] = useState(false)
@@ -102,7 +106,6 @@ function CreatePostForm() {
 
   return (
     <div className="flex flex-col gap-4">
-      <RemoveableParent />
       <Textarea
         value={text ?? ''}
         onChange={handleSetText}
@@ -111,14 +114,11 @@ function CreatePostForm() {
       />
       <RemoveableImage />
       <RemoveableEmbed />
-      <RemoveableQuote />
       <div className="flex justify-between">
         <div className="flex gap-4">
           <UploadImage />
           <EmbedLink />
-          <ParentCast />
-          <QuoteCast />
-          <Channel />
+          <Channel id={farcasterChannel} />
         </div>
         <div className="flex flex-row items-center gap-2">
           <p>{`${length} / 320`}</p>
@@ -395,269 +395,45 @@ function RemoveableEmbed() {
   )
 }
 
-function ParentCast() {
-  const { setParent, parent } = useCreatePost()
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  const handleSetParent = async () => {
-    setLoading(true)
-    if (value) {
-      const data = await api.getCast(value)
-      setParent(data ?? null)
-    }
-    setOpen(false)
-    setLoading(false)
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <TooltipButton tooltip="Reply to post" disabled={!!parent}>
-          <Reply />
-        </TooltipButton>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Reply to post</DialogTitle>
-          <DialogDescription>
-            You can only reply to posts from Warpcast.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-col  gap-4 py-4">
-          <Input
-            id="parent"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="https://warpcast.com/..."
-          />
-        </div>
-        <DialogFooter>
-          <Button onClick={handleSetParent} disabled={loading}>
-            {loading ? <Loader2 className="animate-spin" /> : 'Save'}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-function RemoveableParent() {
-  const { parent, setParent } = useCreatePost()
-  if (!parent) return null
-
-  return (
-    <div className="relative">
-      <div
-        className="w-full border rounded-xl p-2 overflow-hidden cursor-pointer flex flex-col gap-2"
-        onClick={() =>
-          window.open(
-            `https://warpcast.com/${parent.author.username}/${parent.hash}`,
-            '_blank'
-          )
-        }
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            window.open(
-              `https://warpcast.com/${parent.author.username}/${parent.hash}`,
-              '_blank'
-            )
-          }
-        }}
-      >
-        <p className="text-sm text-gray-600">Replying to</p>
-        {parent.author && (
-          <div className="flex items-center gap-2">
-            <img
-              src={parent.author.pfp_url}
-              alt={parent.author.username}
-              className="w-6 h-6 rounded-full"
-            />
-            <p className="text-md font-bold">{parent.author.username}</p>
-          </div>
-        )}
-        <p className="text-md line-clamp-2">{parent.text}</p>
-      </div>
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => setParent(null)}
-        className="absolute top-1 right-1"
-      >
-        <X />
-      </Button>
-    </div>
-  )
-}
-
-function Channel() {
+function Channel({ id }: { id: string }) {
   const { setChannel, channel } = useCreatePost()
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(channel?.id ?? '')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleSetChannel = async () => {
-    if (!value) {
-      // clearing the channel
-      setChannel(null)
-      setOpen(false)
-      return
-    }
-
-    setLoading(true)
-    setError(null) // Clear any previous error
-    try {
-    const data = await api.getChannel(value.replace('/', ''))
-    if (!data) {
-      setError('Couldn\'t find that channel.')
-    } else {
-      setChannel(data)
-      setOpen(false)
-      }
-    } catch (e) {
-      console.error(e)
-      setError(`Something went wrong.`)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <TooltipButton tooltip="Channel">
-          {channel ? (
-            <img src={channel.image_url} alt={channel.name} className='rounded-sm' />
-          ) : (
-            <Slash />
-          )}
-        </TooltipButton>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Channel</DialogTitle>
-          <DialogDescription>
-            You can set a channel for your post.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-col gap-4 py-4">
-          <Input
-            id="channel"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="memes"
-          />
-          {error && <p className="text-red-500">{error}</p>}
-        </div>
-        <DialogFooter>
-          <Button onClick={handleSetChannel} disabled={loading}>
-            {loading ? <Loader2 className="animate-spin" /> : 'Save'}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-function QuoteCast() {
-  const { setQuote, embedCount, quote, setEmbed } = useCreatePost()
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  const handleSetQuote = async () => {
-    setLoading(true)
-    if (value) {
-      if (value.includes('x.com') || value.includes('twitter.com')) {
-        setEmbed(value)
-      } else {
-        const data = await api.getCast(value)
-        setQuote(data ?? null)
-      }
-    }
-    setOpen(false)
-    setLoading(false)
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <TooltipButton
-          tooltip="Quote post"
-          disabled={!!quote || embedCount >= MAX_EMBEDS}
-        >
-          <Quote />
-        </TooltipButton>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Quote post</DialogTitle>
-          <DialogDescription>
-            You can quote posts from Warpcast or X/Twitter.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-col  gap-4 py-4">
-          <Input
-            id="quote"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="https://warpcast.com/..., https://x.com/..."
-          />
-        </div>
-        <DialogFooter>
-          <Button onClick={handleSetQuote} disabled={loading}>
-            {loading ? <Loader2 className="animate-spin" /> : 'Save'}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-function RemoveableQuote() {
-  const { quote, setQuote } = useCreatePost()
-  if (!quote) return null
-
-  return (
-    <div className="relative">
-      <div
-        className="w-full border rounded-xl p-2 overflow-hidden cursor-pointer flex flex-col gap-2"
-        onClick={() =>
-          window.open(
-            `https://warpcast.com/${quote.author.username}/${quote.hash}`,
-            '_blank'
-          )
-        }
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            window.open(
-              `https://warpcast.com/${quote.author.username}/${quote.hash}`,
-              '_blank'
-            )
+  useEffect(() => {
+    async function fetchChannel(id: string) {
+      setLoading(true)
+      setError(null) // Clear any previous error
+      try {
+        const data = await api.getChannel(id.replace('/', ''))
+        if (!data) {
+          setError('Couldn\'t find that channel.')
+        } else {
+          setChannel(data)
           }
-        }}
-      >
-        <p className="text-sm text-gray-600">Quoting</p>
-        <div className="flex items-center gap-2">
-          <img
-            src={quote.author.pfp_url}
-            alt={quote.author.username}
-            className="w-6 h-6 rounded-full"
-          />
-          <p className="text-md font-bold">{quote.author.username}</p>
-        </div>
-        <p className="text-md line-clamp-2">{quote.text}</p>
-      </div>
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => setQuote(null)}
-        className="absolute top-1 right-1"
-      >
-        <X />
-      </Button>
-    </div>
+        } catch (e) {
+          console.error(e)
+          setError(`Something went wrong.`)
+        } finally {
+          setLoading(false)
+        }
+    }
+
+    fetchChannel(id);
+  }, [
+    setChannel,
+    id
+  ])
+
+  return (
+    <TooltipButton tooltip={`Posting to /${id} channel`}>
+      {
+        loading ? (<Loader2 />) : error ? (<Ban />) : channel ? (
+          <img src={channel.image_url} alt={channel.name} className='rounded-sm' />
+        ) : (
+          <Slash />
+        )
+      }
+    </TooltipButton>
   )
 }

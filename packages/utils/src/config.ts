@@ -8,6 +8,7 @@ export const TOKEN_CONFIG: Record<
     postAmount: string
     promoteAmount: string
     deleteAmount: string
+    farcasterChannel: string
     farcasterUsername: string
     fid: number
   }
@@ -17,15 +18,8 @@ export const TOKEN_CONFIG: Record<
     postAmount: '10000000000000000000000',
     promoteAmount: '1000000000000000000000000',
     deleteAmount: '1000000000000000000000000',
+    farcasterChannel: 'moxie',
     farcasterUsername: 'tickerchat',
-    fid: 882553,
-  },
-  [COMMENT_ADDRESS]: {
-    ticker: 'COMMENT',
-    postAmount: '1',
-    promoteAmount: '1',
-    deleteAmount: '1',
-    farcasterUsername: 'comment',
     fid: 882553,
   },
 }
