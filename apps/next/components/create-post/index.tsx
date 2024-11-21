@@ -1,7 +1,7 @@
 import { Button } from '../ui/button'
 import { Textarea } from '../ui/textarea'
 import { CreatePostProvider, useCreatePost } from './context'
-import { Image, Link, Loader2, Ban, X, Slash } from 'lucide-react'
+import { Image as ImageIcon, Link, Loader2, Ban, X, Slash } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 import {
@@ -241,7 +241,7 @@ function UploadImage() {
         onChange={handleImageSelect}
       />
       {loading && <Loader2 className="animate-spin" />}
-      {!loading && <Image />}
+      {!loading && <ImageIcon />}
     </TooltipButton>
   )
 }
