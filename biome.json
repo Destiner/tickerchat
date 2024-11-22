@@ -3,6 +3,10 @@
   "organizeImports": {
     "enabled": false
   },
+  "files": {
+    "include": ["apps/**/*.ts", "packages/**/*.ts"],
+    "ignore": ["apps/next/.next/**"]
+  },
   "linter": {
     "enabled": true,
     "rules": {
