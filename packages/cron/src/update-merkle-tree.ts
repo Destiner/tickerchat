@@ -29,6 +29,6 @@ async function buildAndCacheTree(
     `anon:tree:${tokenAddress}:${proofType}`,
     JSON.stringify(tree),
     'EX',
-    2 * HOUR
+    3 * HOUR
   )
 }

@@ -31,7 +31,7 @@ export const merkleTreeRoutes = createElysia({ prefix: '/merkle-tree' }).post(
       `anon:tree:${body.tokenAddress}:${body.proofType}`,
       JSON.stringify(tree),
       'EX',
-      2 * HOUR
+      6 * HOUR
     )
 
     return tree
