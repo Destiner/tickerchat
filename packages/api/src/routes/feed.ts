@@ -1,13 +1,22 @@
 import { Redis } from 'ioredis'
 import { createElysia } from '../utils'
 import { t } from 'elysia'
-import { ProofType } from '@anon/utils/src/proofs'
 import { neynar } from '../services/neynar'
-import { TOKEN_CONFIG } from '@anon/utils/src/config'
+import { FID, TOKEN_CONFIG } from '@anon/utils/src/config'
 
 const redis = new Redis(process.env.REDIS_URL as string)
 
 export const feedRoutes = createElysia({ prefix: '/feed' })
+  .get('/new', async ({ params }) => {
+    const cached = await redis.get('new')
+      if (cached) {
+        return JSON.parse(cached)
+      }
+
+      const response = await neynar.getUserCasts(FID)
+      await redis.set('new', JSON.stringify(response), 'EX', 30)
+      return response
+  })
   .get(
     '/:tokenAddress/new',
     async ({ params }) => {
