@@ -5,7 +5,7 @@ const HIGHER_ADDRESS = '0x0578d8a44db98b23bf096a382e016e29a5ce0ffe'
 const MOXIE_ADDRESS = '0x8c9037d1ef5c6d1f6816278c7aaf5491d24cd527'
 
 const FARCASTER_USERNAME = 'tickerchat'
-const FID = 882553
+export const FID = 882553
 
 export const TOKENS: Address[] = [DEGEN_ADDRESS, HIGHER_ADDRESS, MOXIE_ADDRESS]
 
