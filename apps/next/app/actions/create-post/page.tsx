@@ -81,7 +81,7 @@ export default function CreatePostPage({
       </a>
       {/* {data && (
         <CreatePost
-          tokenAddress={MOXIE_ADDRESS}
+          tokenAddress={TOKENS[0]}
           userAddress={data}
           onSuccess={() => {
             window.parent.postMessage(

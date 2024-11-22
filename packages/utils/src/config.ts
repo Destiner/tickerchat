@@ -1,9 +1,8 @@
 import { type Address, parseUnits } from "viem"
 
-export const DEGEN_ADDRESS = '0x4ed4e862860bed51a9570b96d89af5e1b0efefed'
-export const HIGHER_ADDRESS = '0x0578d8a44db98b23bf096a382e016e29a5ce0ffe'
-export const MOXIE_ADDRESS = '0x8c9037d1ef5c6d1f6816278c7aaf5491d24cd527'
-export const COMMENT_ADDRESS = '0x0000000000000000000000000000000000000000'
+const DEGEN_ADDRESS = '0x4ed4e862860bed51a9570b96d89af5e1b0efefed'
+const HIGHER_ADDRESS = '0x0578d8a44db98b23bf096a382e016e29a5ce0ffe'
+const MOXIE_ADDRESS = '0x8c9037d1ef5c6d1f6816278c7aaf5491d24cd527'
 
 const FARCASTER_USERNAME = 'tickerchat';
 const FID = 882553;

@@ -1,4 +1,4 @@
-import { MOXIE_ADDRESS } from "@anon/utils/src/config";
+import { TOKENS } from "@anon/utils/src/config";
 import React from "react";
 import type { Address } from "viem";
 
@@ -6,7 +6,7 @@ interface State {
   address: Address;
 }
 
-const memoryState: State = { address: MOXIE_ADDRESS }
+const memoryState: State = { address: TOKENS[0] }
 
 function useToken() {
   const [state, setState] = React.useState<State>(memoryState)
