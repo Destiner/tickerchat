@@ -1,4 +1,5 @@
 {
   "nuxt.isNuxtApp": false,
+  "editor.defaultFormatter": "biomejs.biome",
   "editor.formatOnSave": false
 }

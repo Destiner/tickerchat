@@ -9,13 +9,13 @@ const redis = new Redis(process.env.REDIS_URL as string)
 export const feedRoutes = createElysia({ prefix: '/feed' })
   .get('/new', async ({ params }) => {
     const cached = await redis.get('new')
-      if (cached) {
-        return JSON.parse(cached)
-      }
+    if (cached) {
+      return JSON.parse(cached)
+    }
 
-      const response = await neynar.getUserCasts(FID)
-      await redis.set('new', JSON.stringify(response), 'EX', 30)
-      return response
+    const response = await neynar.getUserCasts(FID)
+    await redis.set('new', JSON.stringify(response), 'EX', 30)
+    return response
   })
   .get(
     '/:tokenAddress/new',
