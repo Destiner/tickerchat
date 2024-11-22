@@ -73,6 +73,14 @@ export default function Home() {
           <br />
           Note: the holder data is heavily cached. If you{"'"}ve recently got the tokens,
           please wait for a few hours.
+          Based on <a
+            href="https://anoncast.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold"
+          >
+            anoncast
+          </a>.
         </AlertDescription>
         <div className="mt-4 flex flex-row gap-2 justify-end">
           <a
