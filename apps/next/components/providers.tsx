@@ -9,7 +9,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ThemeProvider } from 'next-themes'
 
 const config = getDefaultConfig({
-  appName: 'My RainbowKit App',
+  appName: 'Tickerchat',
   projectId: '9df3dd72ed4409e550edabebd77bb221',
   chains: [base],
   ssr: true,
