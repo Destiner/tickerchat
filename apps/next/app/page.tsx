@@ -55,8 +55,8 @@ export default function Home() {
           The channel is selected based on the token ticker.
           <br />
           <br />
-          Own {formatUnits(BigInt(tokenConfig.postAmount), 18)} {tokenConfig.ticker} to
-          post to{' '}
+          {tokenConfig ?  <>Own {formatUnits(BigInt(tokenConfig.postAmount), 18)} {tokenConfig.ticker} to
+          post to{' '}</> : <>Select a token</>}
           <a
             href={`https://warpcast.com/~/channel/${tokenConfig.farcasterChannel}`}
             target="_blank"
