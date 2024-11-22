@@ -69,7 +69,6 @@ export const CreatePostProvider = ({
     setImage(null)
     setEmbed(null)
     setQuote(null)
-    setChannel(null)
     setParent(null)
   }
 
