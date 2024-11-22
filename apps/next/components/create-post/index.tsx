@@ -97,7 +97,13 @@ function CreatePostForm({
   }
 
   const handleCreatePost = async () => {
-    await createPost()
+    const success = await createPost()
+    if (!success) {
+      toast({
+        title: 'Failed to submit the post'
+      })
+      return
+    }
     toast({
       title: 'Post will be created in 1-2 minutes',
     })

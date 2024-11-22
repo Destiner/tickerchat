@@ -17,6 +17,7 @@ import { Heart, Loader2, MessageSquare, RefreshCcw } from 'lucide-react'
 import { useState } from 'react'
 import { useSignMessage } from 'wagmi'
 import { api } from '@/lib/api'
+import { Address } from 'viem'
 
 export default function PostFeed({
   tokenAddress,
@@ -49,6 +50,7 @@ export default function PostFeed({
       const message = `${address}:${timestamp}`
       const signature = await signMessageAsync({
         message,
+        account: address as Address,
       })
       return { signature, message }
     } catch {
@@ -255,11 +257,17 @@ function DeleteButton({ cast }: { cast: Cast }) {
   const [open, setOpen] = useState(false)
 
   const handleDelete = async () => {
-    await deletePost(cast.hash)
+    const success = await deletePost(cast.hash)
+    setOpen(false)
+    if (!success) {
+      toast({
+        title: 'Unable to delete'
+      })
+      return
+    }
     toast({
       title: 'Post will be deleted in 1-2 minutes',
     })
-    setOpen(false)
   }
 
   return (
@@ -309,11 +317,17 @@ function PromoteButton({ cast }: { cast: Cast }) {
   const [open, setOpen] = useState(false)
 
   const handlePromote = async () => {
-    await promotePost(cast.hash)
+    const success = await promotePost(cast.hash)
+    setOpen(false)
+    if (!success) {
+      toast({
+        title: 'Unable to promote'
+      })
+      return
+    }
     toast({
       title: 'Post will be promoted in 1-2 minutes',
     })
-    setOpen(false)
   }
 
   return (

@@ -26,6 +26,7 @@ export default function Home() {
       const message = `${address}:${timestamp}`
       const signature = await signMessageAsync({
         message,
+        account: address as Address,
       })
       return { signature, message }
     } catch {

@@ -26,7 +26,7 @@ interface CreatePostContextProps {
   setChannel: (channel: Channel | null) => void
   parent: Cast | null
   setParent: (parent: Cast | null) => void
-  createPost: () => Promise<void>
+  createPost: () => Promise<boolean>
   embedCount: number
   state: State
 }
@@ -74,7 +74,7 @@ export const CreatePostProvider = ({
   }
 
   const createPost = async () => {
-    if (!userAddress) return
+    if (!userAddress) return false
 
     setState({ status: 'signature' })
     try {
@@ -86,7 +86,7 @@ export const CreatePostProvider = ({
       })
       if (!signatureData) {
         setState({ status: 'error', error: 'Failed to get signature' })
-        return
+        return false
       }
 
       setState({ status: 'generating' })
@@ -110,7 +110,7 @@ export const CreatePostProvider = ({
       })
       if (!proof) {
         setState({ status: 'error', error: 'Not allowed to post' })
-        return
+        return false
       }
 
       if (process.env.DISABLE_QUEUE) {
@@ -133,7 +133,9 @@ export const CreatePostProvider = ({
     } catch (e) {
       setState({ status: 'error', error: 'Failed to post' })
       console.error(e)
+      return false
     }
+    return true
   }
 
   const embedCount = [image, embed, quote].filter((e) => e !== null).length
