@@ -1,6 +1,6 @@
 import { api } from '@/lib/api'
 import { generateProof, ProofType } from '@anon/utils/src/proofs'
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { type ReactNode, createContext, useContext, useState } from 'react'
 import { hashMessage } from 'viem'
 
 type DeleteState =
@@ -97,7 +97,8 @@ export const PostProvider = ({
         await api.submitAction(
           ProofType.DELETE_POST,
           Array.from(proof.proof),
-          proof.publicInputs.map((i) => Array.from(i))
+          proof.publicInputs.map((i) => Array.from(i)),
+          {}
         )
       }
 
@@ -146,13 +147,15 @@ export const PostProvider = ({
       if (process.env.DISABLE_QUEUE) {
         await api.promotePost(
           Array.from(proof.proof),
-          proof.publicInputs.map((i) => Array.from(i))
+          proof.publicInputs.map((i) => Array.from(i)),
+          {}
         )
       } else {
         await api.submitAction(
           ProofType.PROMOTE_POST,
           Array.from(proof.proof),
-          proof.publicInputs.map((i) => Array.from(i))
+          proof.publicInputs.map((i) => Array.from(i)),
+          {}
         )
       }
 

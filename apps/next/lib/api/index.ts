@@ -1,5 +1,5 @@
-import { ProofType, Tree } from '@anon/utils/src/proofs'
-import { Cast, Channel, GetCastsResponse, PostCastResponse, ValidateFrameResponse } from '../types'
+import type { ProofType, Tree } from '@anon/utils/src/proofs'
+import type { Cast, Channel, GetCastsResponse, PostCastResponse, ValidateFrameResponse } from '../types'
 import { ApiClient } from './client'
 
 const apiClient = new ApiClient(process.env.NEXT_PUBLIC_API_URL || '')
@@ -24,10 +24,10 @@ export const api = {
     })
     return response.data
   },
-  submitAction: async (type: ProofType, proof: number[], publicInputs: number[][]) => {
+  submitAction: async (type: ProofType, proof: number[], publicInputs: number[][], args: { asReply?: boolean }) => {
     await apiClient.request(`/posts/submit`, {
       method: 'POST',
-      body: JSON.stringify({ type, proof, publicInputs }),
+      body: JSON.stringify({ type, proof, publicInputs, args }),
     })
   },
   createPost: async (proof: number[], publicInputs: number[][]) => {
@@ -44,12 +44,12 @@ export const api = {
     })
     return response.data
   },
-  promotePost: async (proof: number[], publicInputs: number[][]) => {
+  promotePost: async (proof: number[], publicInputs: number[][], args: { asReply?: boolean }) => {
     const response = await apiClient.request<
       { success: false } | { success: true; tweetId: string }
     >(`/posts/promote`, {
       method: 'POST',
-      body: JSON.stringify({ proof, publicInputs }),
+      body: JSON.stringify({ proof, publicInputs, args }),
     })
     return response.data
   },

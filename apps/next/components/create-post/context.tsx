@@ -1,7 +1,7 @@
 import { api } from '@/lib/api'
-import { Cast, Channel } from '@/lib/types'
+import type { Cast, Channel } from '@/lib/types'
 import { generateProof, ProofType } from '@anon/utils/src/proofs'
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { type ReactNode, createContext, useContext, useState } from 'react'
 import { hashMessage } from 'viem'
 
 type State =
@@ -122,7 +122,8 @@ export const CreatePostProvider = ({
         await api.submitAction(
           ProofType.CREATE_POST,
           Array.from(proof.proof),
-          proof.publicInputs.map((i) => Array.from(i))
+          proof.publicInputs.map((i) => Array.from(i)),
+          {}
         )
       }
 
