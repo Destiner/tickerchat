@@ -12,25 +12,20 @@ export default function PostFeed() {
     },
   })
 
-  const canDelete = false
-  const canPromote = false
-
   return (
     <div className="flex flex-col gap-4">
-      <Posts canDelete={canDelete} canPromote={canPromote} casts={newPosts} />
+      <Posts casts={newPosts} />
     </div>
   )
 }
 
 function Posts({
   casts,
-  canDelete,
-  canPromote,
-}: { canDelete: boolean; canPromote: boolean; casts?: Cast[] }) {
+}: { casts?: Cast[] }) {
   return (
     <div className="flex flex-col gap-4">
       {casts?.map((cast) => (
-        <Post key={cast.hash} cast={cast} canDelete={canDelete} canPromote={canPromote} />
+        <Post key={cast.hash} cast={cast} />
       ))}
     </div>
   )
@@ -38,9 +33,7 @@ function Posts({
 
 export function Post({
   cast,
-  canDelete,
-  canPromote,
-}: { cast: Cast; canDelete: boolean; canPromote: boolean }) {
+}: { cast: Cast; }) {
   return (
     <div className="relative">
       <a
