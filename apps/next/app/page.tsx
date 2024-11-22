@@ -77,7 +77,8 @@ export default function Home() {
 
       <ToggleGroup type="single" value={tokenAddress} onValueChange={handleChange}>
         { TOKENS.map((tokenAddress) => (
-          <ToggleGroupItem key={tokenAddress} value={tokenAddress}>
+          <ToggleGroupItem key={tokenAddress} value={tokenAddress} className='flex-1'>
+            <img className='w-[24px] h-[24px] rounded' alt={'Token Logo'} src={`https://dd.dexscreener.com/ds-data/tokens/base/${tokenAddress}.png?size=md&width=100`} />
             ${ TOKEN_CONFIG[tokenAddress].ticker }
           </ToggleGroupItem>
         )) }
