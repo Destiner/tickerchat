@@ -428,7 +428,7 @@ export type Cast = {
 }
 
 export type GetChannelResponse = {
-  channel: Channel;
+  channel: Channel
 }
 
 export type Channel = {

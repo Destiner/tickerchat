@@ -81,7 +81,9 @@ export function CreatePost({
   )
 }
 
-function CreatePostForm({ farcasterChannel }: {
+function CreatePostForm({
+  farcasterChannel,
+}: {
   farcasterChannel: string
 }) {
   const { text, setText, createPost, state } = useCreatePost()
@@ -370,33 +372,32 @@ function Channel({ id }: { id: string }) {
       try {
         const data = await api.getChannel(id.replace('/', ''))
         if (!data) {
-          setError('Couldn\'t find that channel.')
+          setError("Couldn't find that channel.")
         } else {
           setChannel(data)
-          }
-        } catch (e) {
-          console.error(e)
-          setError(`Something went wrong.`)
-        } finally {
-          setLoading(false)
         }
+      } catch (e) {
+        console.error(e)
+        setError(`Something went wrong.`)
+      } finally {
+        setLoading(false)
+      }
     }
 
-    fetchChannel(id);
-  }, [
-    setChannel,
-    id
-  ])
+    fetchChannel(id)
+  }, [setChannel, id])
 
   return (
     <TooltipButton tooltip={`Posting to /${id} channel`}>
-      {
-        loading ? (<Loader2 />) : error ? (<Ban />) : channel ? (
-          <img src={channel.image_url} alt={channel.name} className='rounded-sm' />
-        ) : (
-          <Slash />
-        )
-      }
+      {loading ? (
+        <Loader2 />
+      ) : error ? (
+        <Ban />
+      ) : channel ? (
+        <img src={channel.image_url} alt={channel.name} className="rounded-sm" />
+      ) : (
+        <Slash />
+      )}
     </TooltipButton>
   )
 }

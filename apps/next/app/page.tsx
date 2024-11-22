@@ -4,22 +4,19 @@ import { ConnectButton } from '@/components/connect-button'
 import { CreatePost } from '@/components/create-post'
 import PostFeed from '@/components/post-feed'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
-import { useToken } from '@/hooks/use-token';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { useToken } from '@/hooks/use-token'
 import { TOKEN_CONFIG, TOKENS } from '@anon/utils/src/config'
 import { CircleHelp } from 'lucide-react'
 import { type Address, formatUnits } from 'viem'
 import { useAccount, useSignMessage } from 'wagmi'
 
 export default function Home() {
-  const { address: tokenAddress, setAddress: setTokenAddress } = useToken();
+  const { address: tokenAddress, setAddress: setTokenAddress } = useToken()
   const { address } = useAccount()
   const { signMessageAsync } = useSignMessage()
 
-  const tokenConfig = TOKEN_CONFIG[tokenAddress];
+  const tokenConfig = TOKEN_CONFIG[tokenAddress]
 
   const getSignature = async ({
     address,
@@ -37,7 +34,7 @@ export default function Home() {
   }
 
   function handleChange(newValue: Address): void {
-    setTokenAddress(newValue);
+    setTokenAddress(newValue)
   }
 
   return (
@@ -48,27 +45,29 @@ export default function Home() {
       </div>
       <Alert>
         <CircleHelp className="h-4 w-4" />
-        <AlertTitle className="font-bold">
-          Anonymous chat for every community
-        </AlertTitle>
+        <AlertTitle className="font-bold">Anonymous chat for every community</AlertTitle>
         <AlertDescription>
-          Posts are made anonymous using ZK proofs. It could take up to a few minutes to post.
+          Posts are made anonymous using ZK proofs. It could take up to a few minutes to
+          post.
           <br />
           <br />
           The channel is selected based on the token ticker.
           <br />
           <br />
-          Own { formatUnits(BigInt(tokenConfig.postAmount), 18) } { tokenConfig.ticker } to post to <a
+          Own {formatUnits(BigInt(tokenConfig.postAmount), 18)} {tokenConfig.ticker} to
+          post to{' '}
+          <a
             href={`https://warpcast.com/~/channel/${tokenConfig.farcasterChannel}`}
             target="_blank"
             rel="noopener noreferrer"
-            className='font-semibold'
+            className="font-semibold"
           >
-            /{ tokenConfig.farcasterChannel }
+            /{tokenConfig.farcasterChannel}
           </a>
           <br />
           <br />
-          Note: the holder data is heavily cached. If you{'\''}ve recently got the tokens, please wait for a few hours.
+          Note: the holder data is heavily cached. If you{"'"}ve recently got the tokens,
+          please wait for a few hours.
         </AlertDescription>
         <div className="mt-4 flex flex-row gap-2 justify-end">
           <a
@@ -83,12 +82,16 @@ export default function Home() {
       </Alert>
 
       <ToggleGroup type="single" value={tokenAddress} onValueChange={handleChange}>
-        { TOKENS.map((tokenAddress) => (
-          <ToggleGroupItem key={tokenAddress} value={tokenAddress} className='flex-1'>
-            <img className='w-[24px] h-[24px] rounded' alt={'Token Logo'} src={`https://dd.dexscreener.com/ds-data/tokens/base/${tokenAddress}.png?size=md&width=100`} />
-            ${ TOKEN_CONFIG[tokenAddress].ticker }
+        {TOKENS.map((tokenAddress) => (
+          <ToggleGroupItem key={tokenAddress} value={tokenAddress} className="flex-1">
+            <img
+              className="w-[24px] h-[24px] rounded"
+              alt={'Token Logo'}
+              src={`https://dd.dexscreener.com/ds-data/tokens/base/${tokenAddress}.png?size=md&width=100`}
+            />
+            ${TOKEN_CONFIG[tokenAddress].ticker}
           </ToggleGroupItem>
-        )) }
+        ))}
       </ToggleGroup>
 
       {address && (

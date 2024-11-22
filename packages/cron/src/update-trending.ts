@@ -44,7 +44,7 @@ async function getCastData(hashes: string[]): Promise<Cast[]> {
 
 async function main() {
   for (const token of TOKENS) {
-    await updateTrending(token);
+    await updateTrending(token)
   }
 }
 

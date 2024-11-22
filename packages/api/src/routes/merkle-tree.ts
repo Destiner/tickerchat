@@ -7,15 +7,13 @@ import { TOKEN_CONFIG } from '@anon/utils/src/config'
 
 const redis = new Redis(process.env.REDIS_URL as string)
 
-const MINUTE = 60;
-const HOUR = 60 * MINUTE;
+const MINUTE = 60
+const HOUR = 60 * MINUTE
 
 export const merkleTreeRoutes = createElysia({ prefix: '/merkle-tree' }).post(
   '/',
   async ({ body }) => {
-    const cachedTree = await redis.get(
-      `anon:tree:${body.tokenAddress}:${body.proofType}`
-    )
+    const cachedTree = await redis.get(`anon:tree:${body.tokenAddress}:${body.proofType}`)
     if (cachedTree) {
       return JSON.parse(cachedTree)
     }

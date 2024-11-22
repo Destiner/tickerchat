@@ -83,60 +83,60 @@ export function getPostRoutes(createPostBackend: Noir, submitHashBackend: Noir) 
         }),
       }
     )
-    // .post(
-    //   '/promote',
-    //   async ({ body, submitHashBackend }) => {
-    //     const isValid = await submitHashBackend.verifyFinalProof({
-    //       proof: new Uint8Array(body.proof),
-    //       publicInputs: body.publicInputs.map((i) => new Uint8Array(i)),
-    //     })
-    //     if (!isValid) {
-    //       throw new Error('Invalid proof')
-    //     }
+  // .post(
+  //   '/promote',
+  //   async ({ body, submitHashBackend }) => {
+  //     const isValid = await submitHashBackend.verifyFinalProof({
+  //       proof: new Uint8Array(body.proof),
+  //       publicInputs: body.publicInputs.map((i) => new Uint8Array(i)),
+  //     })
+  //     if (!isValid) {
+  //       throw new Error('Invalid proof')
+  //     }
 
-    //     const params = extractSubmitHashData(body.publicInputs)
-    //     if (params.timestamp < Date.now() / 1000 - 600) {
-    //       return {
-    //         success: false,
-    //       }
-    //     }
+  //     const params = extractSubmitHashData(body.publicInputs)
+  //     if (params.timestamp < Date.now() / 1000 - 600) {
+  //       return {
+  //         success: false,
+  //       }
+  //     }
 
-    //     const mapping = await getPostMapping(params.hash)
-    //     if (mapping?.tweetId) {
-    //       return {
-    //         success: true,
-    //       }
-    //     }
+  //     const mapping = await getPostMapping(params.hash)
+  //     if (mapping?.tweetId) {
+  //       return {
+  //         success: true,
+  //       }
+  //     }
 
-    //     const cast = await neynar.getCast(params.hash)
-    //     if (!cast.cast) {
-    //       return {
-    //         success: false,
-    //       }
-    //     }
+  //     const cast = await neynar.getCast(params.hash)
+  //     if (!cast.cast) {
+  //       return {
+  //         success: false,
+  //       }
+  //     }
 
-    //     const tweetId = await promoteToTwitter(cast.cast)
+  //     const tweetId = await promoteToTwitter(cast.cast)
 
-    //     if (!tweetId) {
-    //       return {
-    //         success: false,
-    //       }
-    //     }
+  //     if (!tweetId) {
+  //       return {
+  //         success: false,
+  //       }
+  //     }
 
-    //     await createPostMapping(params.hash, tweetId)
+  //     await createPostMapping(params.hash, tweetId)
 
-    //     return {
-    //       success: true,
-    //       tweetId,
-    //     }
-    //   },
-    //   {
-    //     body: t.Object({
-    //       proof: t.Array(t.Number()),
-    //       publicInputs: t.Array(t.Array(t.Number())),
-    //     }),
-    //   }
-    // )
+  //     return {
+  //       success: true,
+  //       tweetId,
+  //     }
+  //   },
+  //   {
+  //     body: t.Object({
+  //       proof: t.Array(t.Number()),
+  //       publicInputs: t.Array(t.Array(t.Number())),
+  //     }),
+  //   }
+  // )
 }
 
 function extractCreatePostData(data: number[][]): CreatePostParams {

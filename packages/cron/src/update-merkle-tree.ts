@@ -4,8 +4,8 @@ import Redis from 'ioredis'
 import { ProofType } from '@anon/utils/src/proofs'
 const redis = new Redis(process.env.REDIS_URL as string)
 
-const MINUTE = 60;
-const HOUR = 60 * MINUTE;
+const MINUTE = 60
+const HOUR = 60 * MINUTE
 
 const main = async () => {
   for (const address of TOKENS) {

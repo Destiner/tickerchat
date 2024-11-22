@@ -53,23 +53,25 @@ async function fetchHolders(args: BuildTreeArgs) {
     }
 
     const response = await fetch(url, { headers })
-    const res: {
-      next_cursor: string
-      owners: Array<{
-        fungible_id: string
-        owner_address: string
-        quantity: number
-        quantity_string: string
-        first_transferred_date: string
-        last_transferred_date: string
-      }>
-    } | {
-      detail: string;
-    } = await response.json()
+    const res:
+      | {
+          next_cursor: string
+          owners: Array<{
+            fungible_id: string
+            owner_address: string
+            quantity: number
+            quantity_string: string
+            first_transferred_date: string
+            last_transferred_date: string
+          }>
+        }
+      | {
+          detail: string
+        } = await response.json()
 
     if ('detail' in res) {
-      await sleep(60 * 1000);
-      continue;
+      await sleep(60 * 1000)
+      continue
     }
 
     let shouldBreak = false
@@ -95,5 +97,5 @@ async function fetchHolders(args: BuildTreeArgs) {
 }
 
 async function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
