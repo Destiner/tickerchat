@@ -1,112 +1,24 @@
 import type { Cast } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
-import { PostProvider, usePost } from './context'
-import { useToast } from '@/hooks/use-toast'
-import { Heart, Loader2, MessageSquare, RefreshCcw } from 'lucide-react'
-import { useState } from 'react'
-import { useSignMessage } from 'wagmi'
+import { Heart, MessageSquare, RefreshCcw } from 'lucide-react'
 import { api } from '@/lib/api'
-import { Address } from 'viem'
 
-export default function PostFeed({
-  tokenAddress,
-  userAddress,
-}: { tokenAddress: string; userAddress?: string }) {
-  const [selected, setSelected] = useState<'new' | 'trending'>('new')
-  const { signMessageAsync } = useSignMessage()
-
-  const { data: trendingPosts } = useQuery({
-    queryKey: ['trending', tokenAddress],
-    queryFn: async (): Promise<Cast[]> => {
-      const response = await api.getTrendingPosts(tokenAddress)
-      return response?.casts || []
-    },
-  })
-
+export default function PostFeed() {
   const { data: newPosts } = useQuery({
-    queryKey: ['posts', tokenAddress],
+    queryKey: ['posts'],
     queryFn: async (): Promise<Cast[]> => {
-      const response = await api.getNewPosts(tokenAddress)
+      const response = await api.getGlobalNewPosts()
       return response?.casts || []
     },
   })
-
-  const getSignature = async ({
-    address,
-    timestamp,
-  }: { address: string; timestamp: number }) => {
-    try {
-      const message = `${address}:${timestamp}`
-      const signature = await signMessageAsync({
-        message,
-        account: address as Address,
-      })
-      return { signature, message }
-    } catch {
-      return
-    }
-  }
 
   const canDelete = false
   const canPromote = false
 
   return (
-    <PostProvider
-      tokenAddress={tokenAddress}
-      userAddress={userAddress}
-      getSignature={getSignature}
-    >
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-4">
-          {newPosts && (
-            <div
-              className={`text-xl font-bold cursor-pointer ${
-                selected !== 'new' ? 'text-gray-500' : ''
-              }`}
-              onClick={() => setSelected('new')}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  setSelected('new')
-                }
-              }}
-            >
-              New
-            </div>
-          )}
-          {trendingPosts && (
-            <div
-              className={`text-xl font-bold cursor-pointer ${
-                selected !== 'trending' ? 'text-gray-500' : ''
-              }`}
-              onClick={() => setSelected('trending')}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  setSelected('trending')
-                }
-              }}
-            >
-              Trending
-            </div>
-          )}
-        </div>
-        {selected === 'new' ? (
-          <Posts canDelete={canDelete} canPromote={canPromote} casts={newPosts} />
-        ) : (
-          <Posts canDelete={canDelete} canPromote={canPromote} casts={trendingPosts} />
-        )}
-      </div>
-    </PostProvider>
+    <div className="flex flex-col gap-4">
+      <Posts canDelete={canDelete} canPromote={canPromote} casts={newPosts} />
+    </div>
   )
 }
 
@@ -219,10 +131,6 @@ export function Post({
           </div>
         </div>
       </a>
-      <div className="absolute top-2 right-2 flex flex-row gap-2">
-        {canDelete && <DeleteButton cast={cast} />}
-        {canPromote && <PromoteButton cast={cast} />}
-      </div>
     </div>
   )
 }
@@ -249,120 +157,4 @@ function timeAgo(timestamp: string): string {
   }
 
   return 'just now'
-}
-
-function DeleteButton({ cast }: { cast: Cast }) {
-  const { toast } = useToast()
-  const { deletePost, deleteState } = usePost()
-  const [open, setOpen] = useState(false)
-
-  const handleDelete = async () => {
-    const success = await deletePost(cast.hash)
-    setOpen(false)
-    if (!success) {
-      toast({
-        title: 'Unable to delete'
-      })
-      return
-    }
-    toast({
-      title: 'Post will be deleted in 1-2 minutes',
-    })
-  }
-
-  return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="sm" className="font-semibold">
-          Delete
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the post.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={deleteState.status !== 'idle'}
-          >
-            {deleteState.status === 'generating' ? (
-              <div className="flex flex-row items-center gap-2">
-                <Loader2 className="animate-spin" />
-                <p>Generating proof</p>
-              </div>
-            ) : deleteState.status === 'signature' ? (
-              <div className="flex flex-row items-center gap-2">
-                <Loader2 className="animate-spin" />
-                <p>Awaiting signature</p>
-              </div>
-            ) : (
-              'Delete'
-            )}
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  )
-}
-
-function PromoteButton({ cast }: { cast: Cast }) {
-  const { toast } = useToast()
-  const { promotePost, promoteState } = usePost()
-  const [open, setOpen] = useState(false)
-
-  const handlePromote = async () => {
-    const success = await promotePost(cast.hash)
-    setOpen(false)
-    if (!success) {
-      toast({
-        title: 'Unable to promote'
-      })
-      return
-    }
-    toast({
-      title: 'Post will be promoted in 1-2 minutes',
-    })
-  }
-
-  return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <Button size="sm" className="font-semibold">
-          Promote
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Promote to X/Twitter?</AlertDialogTitle>
-          <AlertDialogDescription>
-            You will need to delete the post if you want to remove it from X/Twitter.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button onClick={handlePromote} disabled={promoteState.status !== 'idle'}>
-            {promoteState.status === 'generating' ? (
-              <div className="flex flex-row items-center gap-2">
-                <Loader2 className="animate-spin" />
-                <p>Generating proof</p>
-              </div>
-            ) : promoteState.status === 'signature' ? (
-              <div className="flex flex-row items-center gap-2">
-                <Loader2 className="animate-spin" />
-                <p>Awaiting signature</p>
-              </div>
-            ) : (
-              'Promote'
-            )}
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  )
 }

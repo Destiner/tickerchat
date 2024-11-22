@@ -102,7 +102,7 @@ export default function Home() {
           getSignature={getSignature}
         />
       )}
-      <PostFeed tokenAddress={tokenAddress} userAddress={address} />
+      <PostFeed />
     </div>
   )
 }

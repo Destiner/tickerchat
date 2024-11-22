@@ -11,6 +11,12 @@ import { ApiClient } from './client'
 const apiClient = new ApiClient(process.env.NEXT_PUBLIC_API_URL || '')
 
 export const api = {
+  getGlobalNewPosts: async () => {
+    const response = await apiClient.request<GetCastsResponse>(
+      `/feed/new`
+    )
+    return response.data
+  },
   getNewPosts: async (tokenAddress: string) => {
     const response = await apiClient.request<GetCastsResponse>(
       `/feed/${tokenAddress}/new`
