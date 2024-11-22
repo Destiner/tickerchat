@@ -2,6 +2,8 @@
 
 Anonymous chat for every community
 
+Heavily inspired by [anoncast](https://github.com/Slokh/anoncast).
+
 ## Development
 
 ### Frontend
