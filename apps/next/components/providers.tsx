@@ -19,7 +19,7 @@ const queryClient = new QueryClient()
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
+    <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>{children}</RainbowKitProvider>
