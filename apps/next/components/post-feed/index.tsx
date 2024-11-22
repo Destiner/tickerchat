@@ -2,6 +2,7 @@ import type { Cast } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
 import { Heart, MessageSquare, RefreshCcw } from 'lucide-react'
 import { api } from '@/lib/api'
+import { TOKEN_CONFIG } from '@anon/utils/src/config'
 
 export default function PostFeed() {
   const { data: newPosts } = useQuery({
@@ -34,6 +35,19 @@ function Posts({
 export function Post({
   cast,
 }: { cast: Cast; }) {
+  function getTickerByChannel(id: string | null): string | null {
+    if (!id) {
+      return null
+    }
+    const token = Object.values(TOKEN_CONFIG).find(config => config.farcasterChannel === id);
+    if (!token) {
+      return null
+    }
+    return token.ticker
+  }
+
+  const ticker = getTickerByChannel(cast.channel?.id || null)
+
   return (
     <div className="relative">
       <a
@@ -44,9 +58,12 @@ export function Post({
         <div className="flex flex-row gap-4 border p-4 rounded-xl">
           <img src={cast.author?.pfp_url} className="w-10 h-10 rounded-full" alt="pfp" />
           <div className="flex flex-col gap-2 w-full">
-            <div className="flex flex-row items-center gap-2">
-              <div className="text-md font-bold">{cast.author?.username}</div>
-              <div className="text-sm font-semibold">{timeAgo(cast.timestamp)}</div>
+            <div className='flex justify-between'>
+              <div className="flex flex-row items-center gap-2">
+                <div className="text-md font-bold">{cast.author?.username}</div>
+                <div className="text-sm font-semibold">{timeAgo(cast.timestamp)}</div>
+              </div>
+              { ticker ? <div className='font-bold'>${ticker}</div> : null }
             </div>
             <div className="text-md">{cast.text}</div>
             {cast.embeds.map((embed) => {
