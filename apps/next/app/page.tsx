@@ -55,16 +55,20 @@ export default function Home() {
           The channel is selected based on the token ticker.
           <br />
           <br />
-          {tokenConfig ?  <>Own {formatUnits(BigInt(tokenConfig.postAmount), 18)} {tokenConfig.ticker} to
-          post to{' '}</> : <>Select a token</>}
-          <a
-            href={`https://warpcast.com/~/channel/${tokenConfig.farcasterChannel}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold"
-          >
-            /{tokenConfig.farcasterChannel}
-          </a>
+          { tokenConfig ?
+            <>Own {formatUnits(BigInt(tokenConfig.postAmount), 18)} {tokenConfig.ticker} to
+            post to{' '} <a
+              href={`https://warpcast.com/~/channel/${tokenConfig.farcasterChannel}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold"
+            >
+              /{tokenConfig.farcasterChannel}
+            </a>
+            </>
+            :
+            <>Select a token</>
+          }
           <br />
           <br />
           Note: the holder data is heavily cached. If you{"'"}ve recently got the tokens,
