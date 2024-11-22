@@ -1,5 +1,5 @@
-import { ActionPayload } from '@/lib/types'
-import { NextRequest, NextResponse } from 'next/server'
+import type { ActionPayload } from '@/lib/types'
+import { type NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'edge'
 

@@ -555,4 +555,3 @@ export type ValidateFrameResponse = {
     signer: string
   }
 }
-

@@ -1,4 +1,4 @@
-import { ApiResponse, RequestConfig } from './types'
+import type { ApiResponse, RequestConfig } from './types'
 
 export class ApiClient {
   private baseUrl: string
