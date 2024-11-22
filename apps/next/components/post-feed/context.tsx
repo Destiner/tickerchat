@@ -22,9 +22,9 @@ type PromoteState =
     }
 
 interface PostContextProps {
-  deletePost: (hash: string) => Promise<void>
+  deletePost: (hash: string) => Promise<boolean>
   deleteState: DeleteState
-  promotePost: (hash: string) => Promise<void>
+  promotePost: (hash: string) => Promise<boolean>
   promoteState: PromoteState
 }
 
@@ -54,7 +54,7 @@ export const PostProvider = ({
   const [promoteState, setPromoteState] = useState<PromoteState>({ status: 'idle' })
 
   const deletePost = async (hash: string) => {
-    if (!userAddress) return
+    if (!userAddress) return false
 
     setDeleteState({ status: 'signature' })
     try {
@@ -65,7 +65,7 @@ export const PostProvider = ({
       })
       if (!signatureData) {
         setDeleteState({ status: 'error', error: 'Failed to get signature' })
-        return
+        return false
       }
 
       setDeleteState({ status: 'generating' })
@@ -85,7 +85,7 @@ export const PostProvider = ({
       })
       if (!proof) {
         setDeleteState({ status: 'error', error: 'Not allowed to delete' })
-        return
+        return false
       }
 
       if (process.env.DISABLE_QUEUE) {
@@ -106,11 +106,13 @@ export const PostProvider = ({
     } catch (e) {
       setDeleteState({ status: 'error', error: 'Failed to delete' })
       console.error(e)
+      return false
     }
+    return true
   }
 
   const promotePost = async (hash: string) => {
-    if (!userAddress) return
+    if (!userAddress) return false
 
     setPromoteState({ status: 'signature' })
     try {
@@ -121,7 +123,7 @@ export const PostProvider = ({
       })
       if (!signatureData) {
         setPromoteState({ status: 'error', error: 'Failed to get signature' })
-        return
+        return false
       }
 
       setPromoteState({ status: 'generating' })
@@ -141,7 +143,7 @@ export const PostProvider = ({
       })
       if (!proof) {
         setPromoteState({ status: 'error', error: 'Not allowed to delete' })
-        return
+        return false
       }
 
       if (process.env.DISABLE_QUEUE) {
@@ -163,7 +165,9 @@ export const PostProvider = ({
     } catch (e) {
       setPromoteState({ status: 'error', error: 'Failed to promote' })
       console.error(e)
+      return false
     }
+    return true
   }
 
   return (
