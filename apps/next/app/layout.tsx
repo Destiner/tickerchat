@@ -59,8 +59,10 @@ export const metadata: Metadata = {
   description: 'Anonymous chat for every community',
   openGraph: {
     title: 'tickerchat',
+    siteName: 'tickerchat',
     description: 'Anonymous chat for every community',
     images: ['/social.png'],
+    url: 'https://tickerchat.xyz',
   },
 }
 
