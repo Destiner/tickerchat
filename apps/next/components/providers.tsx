@@ -1,29 +1,36 @@
 'use client'
 
-import '@rainbow-me/rainbowkit/styles.css'
-
-import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit'
-import { WagmiProvider } from 'wagmi'
-import { base } from 'wagmi/chains'
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
-import { ThemeProvider } from 'next-themes'
-
-const config = getDefaultConfig({
-  appName: 'Tickerchat',
-  projectId: '9df3dd72ed4409e550edabebd77bb221',
-  chains: [base],
-  ssr: true,
-})
+import { wagmiAdapter, projectId } from '@/wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { createAppKit } from '@reown/appkit/react'
+import { base } from '@reown/appkit/networks'
+import React, { type ReactNode } from 'react'
+import { cookieToInitialState, WagmiProvider, type Config } from 'wagmi'
+import { ThemeProvider } from 'next-themes';
 
 const queryClient = new QueryClient()
 
-export function Providers({ children }: { children: React.ReactNode }) {
+createAppKit({
+  themeMode: 'light',
+  adapters: [wagmiAdapter],
+  projectId,
+  networks: [base],
+  defaultNetwork: base,
+  features: {
+    socials: false,
+    email: false,
+    swaps: false,
+    analytics: false
+  }
+})
+
+export function Providers({ children, cookies }: { children: ReactNode; cookies: string | null }) {
+  const initialState = cookieToInitialState(wagmiAdapter.wagmiConfig as Config, cookies)
+
   return (
     <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider>{children}</RainbowKitProvider>
-        </QueryClientProvider>
+      <WagmiProvider config={wagmiAdapter.wagmiConfig as Config} initialState={initialState}>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       </WagmiProvider>
     </ThemeProvider>
   )

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { headers } from 'next/headers'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/toaster'
@@ -71,10 +72,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookies = headers().get('cookie')
+
   return (
     <html lang="en">
       <body className={`${sfProRounded.className} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers cookies={cookies}>{children}</Providers>
         <Toaster />
       </body>
     </html>
