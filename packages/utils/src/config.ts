@@ -21,21 +21,21 @@ export const TOKEN_CONFIG: Record<
 > = {
   [DEGEN_ADDRESS]: {
     ticker: 'DEGEN',
-    postAmount: parseUnits('75000', 18).toString(),
+    postAmount: parseUnits('150000', 18).toString(),
     farcasterChannel: 'degen',
     farcasterUsername: FARCASTER_USERNAME,
     fid: FID,
   },
   [HIGHER_ADDRESS]: {
     ticker: 'HIGHER',
-    postAmount: parseUnits('2500', 18).toString(),
+    postAmount: parseUnits('5000', 18).toString(),
     farcasterChannel: 'higher',
     farcasterUsername: FARCASTER_USERNAME,
     fid: FID,
   },
   [MOXIE_ADDRESS]: {
     ticker: 'MOXIE',
-    postAmount: parseUnits('8000', 18).toString(),
+    postAmount: parseUnits('16000', 18).toString(),
     farcasterChannel: 'airstack',
     farcasterUsername: FARCASTER_USERNAME,
     fid: FID,
